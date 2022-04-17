@@ -4,7 +4,7 @@ class Colors {
   Color _backgroundColor = Color(0XFFFFFFFF);
   Color _mainColor = Color(0XFFfaeed2);
   Color _focusColor = Color(0xFFf2d18e);
-  Color _hintColor = Color(0xFFb4b4b4);
+  Color _hintColor = Color(0xFF9e9e9e);
 
   Color backgroundColor(double opacity) {
     return this._backgroundColor.withOpacity(opacity);

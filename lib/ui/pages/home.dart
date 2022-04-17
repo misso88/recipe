@@ -1,74 +1,108 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
-import 'package:recipe/providers/bottom_navigation_provider.dart';
-import 'package:recipe/ui/widgets/searchWidget.dart';
+
+import 'package:recipe/settings/server.dart';
+import 'package:recipe/ui/widgets/search_widget.dart';
+import 'package:recipe/providers/banner_provider.dart';
+import 'package:recipe/providers/category_provider.dart';
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
-  late BottomNavigationProvider _bottomNavigationProvider;
+  late BannerProvider _bannerProvider;
+  late CategoryProvider _categoryProvider;
 
-  Widget _navigationBody() {
-    switch (_bottomNavigationProvider.currentPage) {
-      case 0:
-        break;
-      case 1:
-        break;
-      case 2:
-        break;
-      case 3:
-        break;
-      case 4:
-        break;
-    }
-    return Container();
+  Widget _bannerSlide() {
+    _bannerProvider.loadBanners();
+    return Consumer<BannerProvider>(// 전체화면 업데이트가 아닌 일부분만 업데이트
+        builder: (context, provider, widget) {
+      if (provider.banners != null && provider.banners.length > 0) {
+        return Swiper(
+            autoplay: true,
+            pagination: SwiperCustomPagination(
+                builder: (BuildContext context, SwiperPluginConfig config) {
+              return Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.black.withOpacity(0.4),
+                      backgroundBlendMode: BlendMode.colorBurn),
+                  child: Text(
+                    " ${config.activeIndex} / ${provider.banners.length} ",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              );
+            }),
+            itemCount: provider.banners.length,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                  onTap: () {},
+                  child: Image.network(
+                    "${Server.bannerImgUrl}/${provider.banners[index].bn_img}",
+                    fit: BoxFit.fill,
+                  ));
+            });
+      } else {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    });
   }
 
-  Widget _bottomNavigationBarWidget() {
-    return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(
-            icon: Icon(Icons.create_new_folder_rounded), label: "계량"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book_rounded), label: "레시피북"),
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "홈"),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "찜"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.person_rounded), label: "마이페이지")
-      ],
-      currentIndex: _bottomNavigationProvider.currentPage,
-      selectedItemColor: Colors.red,
-      type: BottomNavigationBarType.fixed, // 아이템 개수를 4개 이상하기 위해 설정
-      onTap: (index) {
-        _bottomNavigationProvider.updateCurrentPage(index);
-      },
-    );
+  Widget _category() {
+    _categoryProvider.loadCategorys();
+    return Consumer<CategoryProvider>(// 전체화면 업데이트가 아닌 일부분만 업데이트
+        builder: (context, provider, widget) {
+      if (provider.categorys != null && provider.categorys.length > 0) {
+        return Container();
+      } else {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    _bottomNavigationProvider = Provider.of<BottomNavigationProvider>(context);
+    // listen: false 수정될때마다 업데이트X -> Consumer로 일부분만 업데이트
+    // listen: true 무한호출
+    _bannerProvider = Provider.of<BannerProvider>(context, listen: false);
+    _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).backgroundColor,
-        title: Row(
-          children: [
-            Image.asset(
-              "assets/logo/logo.png",
-              width: 60,
-              height: 40,
-            ),
-            Expanded(
-              child: SearchWidget(hintText: "오늘의 레시피는?"),
-            ),
-            Icon(
-              Icons.notifications_none_rounded,
-              color: Theme.of(context).hintColor,
-            )
-          ],
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).backgroundColor,
+          title: Row(
+            children: [
+              Image.asset(
+                "assets/logo/logo.png",
+                width: 60,
+                height: 40,
+              ),
+              Expanded(
+                child: SearchWidget(hintText: "오늘의 레시피는?"),
+              ),
+              Icon(
+                Icons.notifications_none_rounded,
+                color: Theme.of(context).hintColor,
+              )
+            ],
+          ),
         ),
-      ),
-      body: _navigationBody(),
-      bottomNavigationBar: _bottomNavigationBarWidget(),
-    );
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            Container(
+              height: 160,
+              child: _bannerSlide(),
+            ),
+            _category()
+          ],
+        )));
   }
 }

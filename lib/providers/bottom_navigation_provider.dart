@@ -6,6 +6,6 @@ class BottomNavigationProvider extends ChangeNotifier {
 
   updateCurrentPage(int index) {
     _index = index;
-    notifyListeners(); // 업데이트
+    notifyListeners(); // 상태 업데이트
   }
 }

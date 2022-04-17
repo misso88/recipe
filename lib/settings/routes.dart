@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:recipe/ui/pages/intro.dart';
-import 'package:recipe/ui/pages/home.dart';
+import 'package:recipe/ui/bottom_navigation.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -10,7 +10,7 @@ class Routes {
         // (_) : 매개변수를 사용하고 싶지 않을 때 _ 사용
         return MaterialPageRoute(builder: (_) => Intro());
       case '/home':
-        return MaterialPageRoute(builder: (_) => Home());
+        return MaterialPageRoute(builder: (_) => BottomNavigation());
       default:
         return _errorRoute();
     }

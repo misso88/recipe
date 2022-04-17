@@ -8,6 +8,7 @@ class SearchWidget extends StatefulWidget {
   _SearchWidgetState createState() => _SearchWidgetState();
 }
 
+// 추후 stless로 변경 가능한지 확인
 class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:recipe/styles/colors.dart' as style;
 import 'package:provider/provider.dart';
 import 'package:recipe/providers/bottom_navigation_provider.dart';
-import 'package:recipe/ui/pages/home.dart';
-import 'package:recipe/ui/routes.dart';
+import 'package:recipe/providers/banner_provider.dart';
+import 'package:recipe/providers/category_provider.dart';
+import 'package:recipe/ui/bottom_navigation.dart';
+import 'package:recipe/settings/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,8 +34,14 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (BuildContext context) => BottomNavigationProvider(),
           ),
+          ChangeNotifierProvider(
+            create: (BuildContext context) => BannerProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (BuildContext context) => CategoryProvider(),
+          ),
         ],
-        child: Home(),
+        child: BottomNavigation(),
       ),
       theme: ThemeData(
         fontFamily: 'LeeSeoyun',
