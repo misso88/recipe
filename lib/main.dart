@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:recipe/providers/bottom_navigation_provider.dart';
 import 'package:recipe/providers/banner_provider.dart';
 import 'package:recipe/providers/category_provider.dart';
+import 'package:recipe/providers/recipe_provider.dart';
 import 'package:recipe/ui/bottom_navigation.dart';
 import 'package:recipe/settings/routes.dart';
 
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider(
             create: (BuildContext context) => CategoryProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (BuildContext context) => RecipeProvider(),
           ),
         ],
         child: BottomNavigation(),

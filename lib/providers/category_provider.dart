@@ -9,11 +9,11 @@ class CategoryProvider extends ChangeNotifier {
   List<ctg.Category> get categorys => _categorys; // 외부접근O
 
   loadCategorys() async {
-    List<ctg.Category> listCategorys =
+    List<ctg.Category> categoryList =
         await _categoryRepository.getCategoryList();
-    // listMovies 예외처리
+    // ..List 예외처리
     // 추가적인 가공절차
-    _categorys = listCategorys;
+    _categorys = categoryList;
     notifyListeners(); // 상태 업데이트
   }
 }

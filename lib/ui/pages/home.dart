@@ -3,14 +3,14 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 
 import 'package:recipe/settings/server.dart';
+import 'package:recipe/ui/widgets/category_widget.dart';
 import 'package:recipe/ui/widgets/search_widget.dart';
+import 'package:recipe/ui/widgets/infinite_scroll_widget.dart';
 import 'package:recipe/providers/banner_provider.dart';
-import 'package:recipe/providers/category_provider.dart';
 
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
   late BannerProvider _bannerProvider;
-  late CategoryProvider _categoryProvider;
 
   Widget _bannerSlide() {
     _bannerProvider.loadBanners();
@@ -54,26 +54,11 @@ class Home extends StatelessWidget {
     });
   }
 
-  Widget _category() {
-    _categoryProvider.loadCategorys();
-    return Consumer<CategoryProvider>(// 전체화면 업데이트가 아닌 일부분만 업데이트
-        builder: (context, provider, widget) {
-      if (provider.categorys != null && provider.categorys.length > 0) {
-        return Container();
-      } else {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // listen: false 수정될때마다 업데이트X -> Consumer로 일부분만 업데이트
     // listen: true 무한호출
     _bannerProvider = Provider.of<BannerProvider>(context, listen: false);
-    _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
@@ -97,11 +82,16 @@ class Home extends StatelessWidget {
         body: SingleChildScrollView(
             child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 160,
               child: _bannerSlide(),
             ),
-            _category()
+            CategoryWidget(),
+            InfiniteScrollWidget(mode: 1)
+            // SizedBox(
+            //   height: 350,
+            //   child: InfiniteScrollWidget(mode: 1),
+            // ),
           ],
         )));
   }

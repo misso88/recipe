@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:recipe/providers/bottom_navigation_provider.dart';
 import 'package:recipe/ui/pages/home.dart';
+import 'package:recipe/ui/pages/recipebook.dart';
 import 'package:recipe/ui/widgets/search_widget.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -15,9 +16,7 @@ class BottomNavigation extends StatelessWidget {
           child: Text("계량"),
         );
       case 1:
-        return Center(
-          child: Text("레시피북"),
-        );
+        return RecipeBook();
       case 2:
         return Home();
       case 3:

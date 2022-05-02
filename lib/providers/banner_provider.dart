@@ -8,10 +8,10 @@ class BannerProvider extends ChangeNotifier {
   List<Banner> get banners => _banners; // 외부접근O
 
   loadBanners() async {
-    List<Banner> listBanners = await _bannerRepository.getBannerList();
-    // listMovies 예외처리
+    List<Banner> bannerList = await _bannerRepository.getBannerList();
+    // ..List 예외처리
     // 추가적인 가공절차
-    _banners = listBanners;
+    _banners = bannerList;
     notifyListeners(); // 상태 업데이트
   }
 }
