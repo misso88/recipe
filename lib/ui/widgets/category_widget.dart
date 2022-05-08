@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:recipe/models/category.dart';
-import 'package:recipe/providers/category_provider.dart';
+import 'package:get/get.dart';
 import 'package:recipe/settings/server.dart';
-import 'package:recipe/models/category.dart' as ctg;
+import 'package:recipe/models/category.dart';
+import 'package:recipe/controllers/category_controller.dart';
 
 class CategoryWidget extends StatelessWidget {
   CategoryWidget({Key? key}) : super(key: key);
-  late CategoryProvider _categoryProvider;
+  final categoryController = Get.put(CategoryController());
 
   Widget _listView(List<Category> categorys) {
     return ListView.builder(
@@ -39,22 +38,21 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // listen: false 수정될때마다 업데이트X -> Consumer로 일부분만 업데이트
-    // listen: true 무한호출
-    _categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
-    _categoryProvider.loadCategorys();
+    categoryController.loadCategorys();
     return SizedBox(
       height: 100,
-      child: Consumer<CategoryProvider>(// 전체화면 업데이트가 아닌 일부분만 업데이트
-          builder: (context, provider, widget) {
-        if (provider.categorys != null && provider.categorys.length > 0) {
-          return _listView(provider.categorys);
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      }),
+      child: GetBuilder<CategoryController>(
+        builder: (categoryController) {
+          if (categoryController.categorys != null &&
+              categoryController.categorys.length > 0) {
+            return _listView(categoryController.categorys);
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:recipe/models/category.dart';
 class CategoryRepository {
   // API로 호출해서 값을 받아오는 부분
   // ui에서 접근X
-  // provider에서 접근O
+  // controller에서 접근O
   final http.Client _client = http.Client();
 
   Future<List<Category>> getCategoryList() async {

@@ -2,14 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:recipe/settings/server.dart';
 import 'package:recipe/models/recipe.dart';
 
-class SharedRecipeWidget extends StatelessWidget {
+class RecipeWidget extends StatelessWidget {
+  // mode : 0(내 레시피), 1(공유 레시피)
+  final int mode;
   final Recipe recipe;
-  const SharedRecipeWidget({Key? key, required this.recipe}) : super(key: key);
+  const RecipeWidget({Key? key, required this.recipe, required this.mode})
+      : super(key: key);
 
-  Widget _sharedRecipe(Recipe recipe) {
+  Widget _myRecipe() {
+    return Container(
+        height: 100,
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(width: 0.5, color: Colors.grey)),
+        child: Row(
+          children: [
+            Container(
+                height: 90,
+                width: 90,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                          recipe.rp_img1 == null
+                              ? "${Server.categoryImgUrl}/${recipe.ct_img}"
+                              : "${Server.recipeImgUrl}/${recipe.rp_img1}",
+                        ),
+                        fit: BoxFit.cover))),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [Text(recipe.rp_title), Text(recipe.rp_uddate)],
+                  ),
+                  Text(
+                    recipe.rp_contents ?? "",
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ]))
+          ],
+        ));
+  }
+
+  Widget _sharedRecipe() {
     return Container(
         margin: EdgeInsets.all(10),
-        // height: 350,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(width: 0.5, color: Colors.grey)),
@@ -74,6 +119,9 @@ class SharedRecipeWidget extends StatelessWidget {
                     recipe.rp_title,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Text(
                     recipe.rp_contents ?? "",
                     overflow: TextOverflow.ellipsis,
@@ -88,6 +136,6 @@ class SharedRecipeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _sharedRecipe(recipe);
+    return mode == 1 ? _sharedRecipe() : _myRecipe();
   }
 }

@@ -1,5 +1,6 @@
 class Server {
-  static const serverIp = "192.168.0.14";
+  // static const serverIp = "192.168.0.14";
+  static const serverIp = "192.168.0.30";
   static const serverPort = 3000;
   static String imageUrl = "$serverUrl/image";
 
